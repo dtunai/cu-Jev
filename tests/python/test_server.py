@@ -91,3 +91,9 @@ def test_http_shapes_and_errors(server):
     assert httpx.post(f"{server}/v1/systemone", json={"state": "x"}, headers=h).status_code == 422
     assert httpx.post(f"{server}/v1/systemone", json=dict(body, model="gpt-9"), headers=h).status_code == 422
     assert httpx.get(f"{server}/health").json()["status"] == "ok"
+    # the browser example is served by the same process; /play keeps the query string
+    r4 = httpx.get(f"{server}/play?autostart=1")
+    assert r4.status_code in (302, 307) and r4.headers["location"].endswith("index.html?autostart=1")
+    assert httpx.get(f"{server}/examples/starfighter/game.js").status_code == 200
+    assert "access-control-allow-origin" in {k.lower() for k in httpx.options(
+        f"{server}/v1/systemone", headers={"Origin": "http://x", "Access-Control-Request-Method": "POST"}).headers}

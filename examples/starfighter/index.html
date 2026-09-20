@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>cu-Jev Starfighter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div id="left">
+    <canvas id="game" width="560" height="640"></canvas>
+    <div id="hud">
+      <span id="score">SCORE 0</span>
+      <span id="hp">♥♥♥</span>
+      <span id="threat-label">threat</span><span id="threat-meter"><i></i></span>
+    </div>
+  </div>
+  <div id="right">
+    <h1>cu-Jev <span>Starfighter</span></h1>
+    <p class="sub">Every tick the game describes itself in words and asks cu-Jev four typed questions.
+      No text is generated: the pilot is a <code>choice</code>, two <code>noul</code>s and a <code>score</code>,
+      read straight off the model's logits.</p>
+    <div class="row">
+      <button id="start">▶ Start</button>
+      <button id="pause" disabled>❚❚ Pause</button>
+      <label class="chk"><input type="checkbox" id="human"> I fly (← → space)</label>
+    </div>
+    <div id="stats">
+      <div><b id="lat">–</b><small>ms / decision</small></div>
+      <div><b id="dps">–</b><small>decisions / s</small></div>
+      <div><b id="tok">–</b><small>tokens / tick</small></div>
+      <div><b id="model">–</b><small>model</small></div>
+    </div>
+    <div class="q" id="q-move"><div class="qh">move <em>choice</em></div><div class="bars"></div></div>
+    <div class="q" id="q-fire"><div class="qh">fire <em>noul</em></div><div class="bars"></div></div>
+    <div class="q" id="q-shield"><div class="qh">shield <em>noul</em></div><div class="bars"></div></div>
+    <div class="q" id="q-threat"><div class="qh">threat <em>score</em></div><div class="bars"></div></div>
+    <label class="lbl">Pilot orders <small>(sent with every state — edit while playing)</small></label>
+    <textarea id="policy" rows="3">Never sit in a DANGER lane. Find the gap in asteroid walls early. Collect credits, hunt fighters, shield only when a hit is unavoidable.</textarea>
+    <label class="lbl">Last state sent</label>
+    <pre id="state">–</pre>
+    <div id="log"></div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

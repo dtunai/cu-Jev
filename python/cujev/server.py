@@ -9,8 +9,12 @@ import os
 import time
 from typing import Any
 
+from pathlib import Path
+
 from fastapi import FastAPI, Header, Request
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from .systemone import RequestError, SystemOne
 
@@ -20,9 +24,21 @@ def _validation_error(loc: list[Any], msg: str, typ: str = "value_error") -> JSO
     return JSONResponse(status_code=422, content={"detail": [{"loc": loc, "msg": msg, "type": typ}]})
 
 
-def create_app(engine: SystemOne, api_key: str | None = None) -> FastAPI:
+EXAMPLES_DIR = Path(__file__).resolve().parents[2] / "examples"
+
+
+def create_app(engine: SystemOne, api_key: str | None = None, examples: bool = True) -> FastAPI:
     app = FastAPI(title="cu-Jev", version=engine.served.version,
                   description="CUDA-native System One decision engine, Jev-compatible API")
+    # browser examples (and any page on another origin) may call the API directly
+    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+    if examples and EXAMPLES_DIR.is_dir():
+        app.mount("/examples", StaticFiles(directory=str(EXAMPLES_DIR)), name="examples")
+
+        @app.get("/play", include_in_schema=False)
+        def play(request: Request):
+            q = f"?{request.url.query}" if request.url.query else ""
+            return RedirectResponse(f"/examples/starfighter/index.html{q}")
 
     def _auth(authorization: str | None):
         if api_key is None:

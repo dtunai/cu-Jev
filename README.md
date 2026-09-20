@@ -33,6 +33,23 @@ probabilities and confidence. Nothing is decoded, ever.
   edge cases across every tile boundary; independent accuracy benchmark;
   shared-prefix benefit quantified against a naive engine and HF.
 
+## Watch it fly
+
+<p align="center"><img src="assets/starfighter.gif" alt="cu-Jev Starfighter: Qwen3.5-4B flying a lane shooter through typed decisions" width="100%"></p>
+
+**[Starfighter](examples/README.md)** is a browser game with no scripted pilot.
+Every tick the game describes itself in words — *"Lane 3 (yours): enemy
+fighter 41u, enemy bullet 18u (DANGER: hit within a second)"* — and asks
+cu-Jev four typed questions in one request: `move` (choice: stay or step to a
+neighbouring lane), `fire` and `shield` (nouls), `threat` (score). Asteroid
+walls with a single gap, credit clusters and fighters that drift between
+lanes make the lane choice matter every second. The answers pass through the
+game's own rules; the probabilities are drawn live on the right. Qwen3.5-4B
+flies it at ~95 ms per decision on an RTX 3090 (≈ 11 decisions/s, ~530 tokens
+of state and questions per tick), and you can rewrite the pilot's orders while
+it plays. `uv run cujev serve --model models/Qwen3.5-4B` then open
+`http://127.0.0.1:8080/play`. ([mp4](assets/starfighter.mp4))
+
 ## Install
 
 Requirements: Linux, an NVIDIA GPU with compute capability 8.0+ (Ampere or

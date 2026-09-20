@@ -17,6 +17,8 @@ dependencies = [
 # HF oracle tests and the benefit benchmark: torch + transformers (CUDA 13 wheels, see [tool.uv])
 dev = ["pytest>=8", "httpx", "typesafe-sdk>=0.7", "torch>=2.8", "transformers>=5.17",
        "safetensors", "pandas", "pyarrow", "flash-linear-attention"]
+# recording the browser example (examples/starfighter/record.py)
+record = ["playwright>=1.45", "imageio-ffmpeg>=0.5"]
 
 [project.scripts]
 cujev = "cujev.__main__:main"
