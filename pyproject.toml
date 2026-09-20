@@ -1,0 +1,50 @@
+[project]
+name = "cujev"
+version = "0.1.0"
+description = "cu-Jev: CUDA-native System One decision engine with a Jev-compatible API"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "tokenizers>=0.20",
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "huggingface_hub>=0.30",
+]
+
+[project.optional-dependencies]
+# HF oracle tests and the benefit benchmark: torch + transformers (CUDA 13 wheels, see [tool.uv])
+dev = ["pytest>=8", "httpx", "typesafe-sdk>=0.7", "torch>=2.8", "transformers>=5.17",
+       "safetensors", "pandas", "pyarrow", "flash-linear-attention"]
+
+[project.scripts]
+cujev = "cujev.__main__:main"
+
+[build-system]
+requires = ["scikit-build-core>=0.10"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+cmake.args = ["-DCUJEV_BUILD_TOOLS=OFF"]
+wheel.packages = ["python/cujev"]
+build-dir = "build/{wheel_tag}"
+# libcujev.so is installed next to the Python package (see CMakeLists install())
+wheel.install-dir = ""
+
+[tool.scikit-build.cmake.define]
+CMAKE_CUDA_ARCHITECTURES = {env = "CUJEV_CUDA_ARCH", default = "86"}
+
+[tool.uv]
+# torch wheels for CUDA 13 come from PyTorch's index
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests/python"]

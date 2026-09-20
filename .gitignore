@@ -1,0 +1,23 @@
+# build
+build/
+build-*/
+*.so
+*.o
+# python / uv
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+dist/
+# data & results
+benchmarks/data/
+models/
+# private research notes
+docs/research/
+docs/*
+# tooling
+.cache/
+.nsys-rep
+*.nsys-rep
+*.sqlite
