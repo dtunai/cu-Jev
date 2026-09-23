@@ -11,8 +11,8 @@ from cujev.prompt import PromptBuilder  # noqa: E402
 from cujev.systemone import _confidence, _softmax  # noqa: E402
 
 TOK = None
-for p in (Path.home() / "OS/Research-Projects/models/Qwen3.5-0.8B/tokenizer.json",
-          Path.home() / "OS/Research-Projects/models/Qwen3.5-4B/tokenizer.json"):
+for p in (Path.home() / "OS/dthinky/models/Qwen3.5-0.8B/tokenizer.json",
+          Path.home() / "OS/dthinky/models/Qwen3.5-4B/tokenizer.json"):
     if p.exists():
         TOK = p
         break
